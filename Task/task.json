@@ -18,6 +18,13 @@
   },
   "minimumAgentVersion": "1.83.0",
   "instanceNameFormat": "Cake $(message)",
+  "groups": [
+    {
+      "name": "advanced",
+      "displayName": "Advanced",
+      "isExpanded": false
+    }
+  ],
   "inputs": [
     {
       "name": "script",
@@ -57,6 +64,24 @@
       "defaultValue":"",
       "helpMarkDown": "Additional arguments passed to Cake.",
       "required":false
+    },
+    {
+      "name": "nugetExeLocation",
+      "type": "string",
+      "label": "Nuget Exe Location",
+      "defaultValue": "https://nuget.org/nuget.exe",
+      "required": false,
+      "helpMarkDown": "Where to fetch the nuget executable from.",
+      "groupName": "advanced"
+    },
+    {
+      "name": "nugetFeedUrl",
+      "type": "string",
+      "label": "Nuget Feed Url",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Use an alternate nuget package feed",
+      "groupName": "advanced"
     }
   ],
   "execution": {

@@ -2,7 +2,9 @@ Param(
     [string]$Script,
     [string]$Target,
     [string]$Verbosity,
-    [string]$Arguments
+    [string]$Arguments,
+    [string]$NugetExeLocation,
+    [string]$NugetFeedUrl
 )
 
 Write-Verbose "Parameters:";
@@ -41,7 +43,7 @@ if (!(Test-Path $ToolPath)) {
 if (!(Test-Path $NuGetPath)) {
   # Download NuGet.exe.
   Write-Verbose "Downloading nuget.exe...";
-  (New-Object System.Net.WebClient).DownloadFile("https://nuget.org/nuget.exe", $NuGetPath);
+  (New-Object System.Net.WebClient).DownloadFile($nugetFolderLocation, $NuGetPath);
   # Make sure it was properly downloaded.
   if (!(Test-Path $NuGetPath)) {
       Throw "Could not find nuget.exe";
@@ -54,12 +56,20 @@ Set-Location $ToolPath;
 if ((Test-Path $PackagePath)) {
   # Install tools in packages.config.
   Write-Host "Restoring packages...";
+  if($nugetFeedLocation -ne ""){
+      Invoke-Expression "$NuGetPath install `"$PackagePath`" -ExcludeVersion -OutputDirectory `"$ToolPath`" -Source $nugetFeedLocation";
+  }else{
   Invoke-Expression "$NuGetPath install `"$PackagePath`" -ExcludeVersion -OutputDirectory `"$ToolPath`"";
+  }
 }
 if (!(Test-Path $CakePath)) {
   # Install Cake if not part of packages.config.
   Write-Host "Installing Cake...";
+  if($nugetFeedLocation -ne ""){
+      Invoke-Expression "$NuGetPath install Cake -ExcludeVersion -OutputDirectory `"$ToolPath`" -Source $nugetFeedLocation";
+  }else{
   Invoke-Expression "$NuGetPath install Cake -ExcludeVersion -OutputDirectory `"$ToolPath`"";
+  }
 }
 Pop-Location;
 
